@@ -1,0 +1,23 @@
+[env]
+DEFMT_LOG = "debug"
+
+[build]
+target = "thumbv7em-none-eabihf"
+
+[target.thumbv7em-none-eabihf]
+rustflags = [
+    "-C", "link-arg=-Tlink.x",
+    "-C", "link-arg=-Tdefmt.x",
+    "-C", "target-cpu=cortex-m7",
+    "-C", "panic=abort",
+]
+
+# For flashing with probe-rs (optional, for debugging)
+runner = "probe-rs run --chip STM32H743VITx --protocol swd --speed 8000"
+
+[alias]
+# Build release binary
+rb = "build --release"
+
+# Build and create DFU file
+dfu = "objcopy --release -- -O binary sdcard-usb-msc.bin"
